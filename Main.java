@@ -6,54 +6,59 @@ public class Main {
 		switch (operation) {
 		case "+":
 			result = num1 + num2;
-			return result;
+			break;
 		case "-":
 			result = num1 - num2;
-			return result;
+			break;
 		case "*":
 			result = num1 * num2;
-			return result;
+			break;
 		case "/":
-			result = num1 / num2;
-			return result;
+			if (num2 != 0) {
+				result = num1 / num2;
+			} else {
+				System.out.println("Division by zero is not allowed.");
+				result = Double.NaN;
+			}
+			break;
 		default:
-			return 0;
+			result = Double.NaN;
 		}
+		return result;
 	}
-	
+
 	public static void main(String[] args) {
 		System.out.println("Hello world!");
-		System.out.println("This is simle java calculator");
+		System.out.println("This is a simple Java calculator");
 		Scanner scanner = new Scanner(System.in);
-		
-		boolean numeric;
-		double num1 = 0;
-		double num2 = 0;
-		String operator = null;
+
 		boolean loop = true;
-		
+
 		while (loop) {
 			System.out.print("> ");
 			String input = scanner.nextLine();
+			if (input.equals("!")) {
+				System.out.println("Exiting...");
+				loop = false;
+				continue;
+			}
 			String[] arguments = input.split(" ");
 			if (arguments.length == 3) {
 				try {
-					num1 = Double.parseDouble(arguments[0]);
-					num2 = Double.parseDouble(arguments[2]);
-					operator = arguments[1];
-					numeric = true;
+					double num1 = Double.parseDouble(arguments[0]);
+					double num2 = Double.parseDouble(arguments[2]);
+					String operator = arguments[1];
+					if (operator.equals("+") || operator.equals("-") || operator.equals("*") || operator.equals("/")) {
+						double result = calculator(num1, operator, num2);
+						System.out.println("Result: " + result);
+					} else {
+						System.out.println("Invalid operator. Use +, -, * or /.");
+					}
 				} catch (NumberFormatException e) {
-					numeric = false;
+					System.out.println("Invalid number format.");
 				}
-				if (numeric != true && (operator != "+" || operator != "-" || operator != "*" || operator != "/")) {
-					System.out.println("Incorrect input");
-				} else {
-					System.out.println(calculator(num1, operator, num2));
-				}
-			} else if (arguments[0] == "!") {
-				System.out.println("Incorrect input");
-				loop = false;
-				break;
+			} else {
+				System.out.println("Incorrect input. Format: <number1> <operator> <number2>");
 			}
 		}
 		scanner.close();
